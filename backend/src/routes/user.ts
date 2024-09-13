@@ -18,17 +18,17 @@ userRouter.post("/signup", async (c) => {
 
   const body = await c.req.json();
   const { success } = signupInput.safeParse(body);
-  if(!success) {
+  if (!success) {
     c.status(411);
     return c.json({
-      msg: "Inputs not correct"
-    })
+      msg: "Inputs not correct",
+    });
   }
 
   try {
     const user = await prisma.user.create({
       data: {
-        email: body.email,
+        email: body.username,
         password: body.password,
         name: body.name,
       },
@@ -37,6 +37,8 @@ userRouter.post("/signup", async (c) => {
     const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
     return c.json({ jwt });
   } catch (e) {
+    console.log(e);
+
     return c.json({
       msg: "Invalid",
     });
@@ -51,17 +53,17 @@ userRouter.post("/signin", async (c) => {
   const body = await c.req.json();
 
   const { success } = signinInput.safeParse(body);
-  if(!success) {
+  if (!success) {
     c.status(411);
     return c.json({
-      msg: "Inputs not correct"
-    })
+      msg: "Inputs not correct",
+    });
   }
 
   try {
     const findUser = await prisma.user.findUnique({
       where: {
-        email: body.email,
+        email: body.username,
       },
     });
 
@@ -80,6 +82,8 @@ userRouter.post("/signin", async (c) => {
 
     return c.text(jwt);
   } catch (e) {
+    console.log(e);
+
     c.status(411);
     return c.text("Invalid");
   }

@@ -9,10 +9,10 @@ export const postRouter = new Hono<{
   Bindings: {
     DATABASE_URL: string;
     JWT_SECRET: string;
-  },
+  };
   Variables: {
     userId: string;
-  }
+  };
 }>();
 
 // middleware
@@ -23,13 +23,13 @@ postRouter.use("/*", async (c, next) => {
   try {
     const user = await verify(token, c.env.JWT_SECRET);
     if (user) {
-        c.set("userId", user.id);
-        await next();
+      c.set("userId", user.id);
+      await next();
     } else {
-        c.status(403);
-        return c.json({
+      c.status(403);
+      return c.json({
         error: "You are not logged in",
-        });
+      });
     }
   } catch (error) {
     c.status(403);
@@ -46,11 +46,11 @@ postRouter.post("/", async (c) => {
 
   const body = await c.req.json();
   const { success } = createBlogInput.safeParse(body);
-  if(!success) {
+  if (!success) {
     c.status(411);
     return c.json({
-      msg: "Inputs not correct"
-    })
+      msg: "Inputs not correct",
+    });
   }
   try {
     const blog = await prisma.post.create({
@@ -79,11 +79,11 @@ postRouter.put("/", async (c) => {
 
   const body = await c.req.json();
   const { success } = updateBlogInput.safeParse(body);
-  if(!success) {
+  if (!success) {
     c.status(411);
     return c.json({
-      msg: "Inputs not correct"
-    })
+      msg: "Inputs not correct",
+    });
   }
 
   try {
@@ -110,7 +110,18 @@ postRouter.get("/bulk", async (c) => {
   }).$extends(withAccelerate());
 
   try {
-    const blogs = await prisma.post.findMany();
+    const blogs = await prisma.post.findMany({
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
     return c.json({
       blogs,
     });
@@ -130,19 +141,30 @@ postRouter.get("/:id", async (c) => {
   }).$extends(withAccelerate());
 
   const id = c.req.param("id");
+  console.log(id);
 
   const { success } = idInput.safeParse(id);
-  if(!success) {
+  if (!success) {
     c.status(411);
     return c.json({
-      msg: "Inputs not correct"
-    })
+      msg: "Inputs not correct",
+    });
   }
 
   try {
     const blog = await prisma.post.findFirst({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 
