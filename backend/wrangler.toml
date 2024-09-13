@@ -3,8 +3,8 @@ compatibility_date = "2024-09-06"
 # compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
-DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNTNkNjE5N2QtZDQ4OC00NTc1LTkwNzYtZjY3MzFhM2M0MzMzIiwidGVuYW50X2lkIjoiZGE3MWUxYTFmYmRhNDM5NDlhYWQ5ZmNhMTM2OWY0YjBhN2M0YWM4MTdkNWEyNjMwMWVkMWY5YzZiZDZkZGM4ZiIsImludGVybmFsX3NlY3JldCI6IjI2NjI3ZWVjLTAwNjUtNDJmOS04MTYzLTNhYTVkMjMzNzlkNiJ9.FvPnI8H_zWTNnuaZ2MhG2NBwHWai0aKHoM6MXQE6_yQ"
-JWT_SECRET="ajaysecret"
+DATABASE_URL=""
+JWT_SECRET=""
 
 # MY_VAR = "my-variable"
 
